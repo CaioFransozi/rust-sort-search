@@ -91,7 +91,7 @@ fn counting_sort(alvo: &mut Vec<u32>, n: u32) {
     // Iterando do tamanho do vetor inicial até 0, fazemos a mesma operação anterior para extrair o
     // digito de interesse do valor atual e posicionamos o valor no vetor de resultado a partir do
     // array de frequência de cada digito
-    for i in (0..(tamanho)).rev() {
+    for i in (0..tamanho).rev() {
         let valor: usize = match ((alvo[i] % digito - alvo[i] % n) / n).try_into() {
             Ok(r) => r,
             Err(e) => panic!("Erro na definição de valor em counting_sort: {e}"),
