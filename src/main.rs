@@ -1,7 +1,7 @@
 use rand::prelude::*;
 
 fn main() {
-    let mut vetor: Vec<u32> = gerar_vetor(9, 100);
+    let mut vetor: Vec<u32> = gerar_vetor(100000, 10000);
     radix_sort(&mut vetor);
     // Como o vetor aceita números duplicados, a pesquisa binária retorna sempre a PRIMEIRA
     // correspondência no vetor. Isso não quer dizer que o resultado é, na ordem do vetor, a
@@ -150,9 +150,8 @@ fn pesquisa_binaria(vetor: &Vec<u32>, valor_desejado: u32) -> i32 {
 }
 
 // Por fim, é necessário também desenvolver uma função para inserir um valor novo no vetor de forma
-// ordenada. Para isso utilizarei um algoritmo de pesquisa linear que retorna o indice de um valor
-// igual ao desejado OU o indice anterior ao primeiro valor maior que o desejado OU retorna o
-// tamanho do vetor
+// ordenada. Para isso utilizarei um algoritmo de pesquisa linear que retorna o indice do o primeiro 
+// valor maior que o desejado OU retorna o tamanho do vetor
 fn pesquisa_linear(vetor: &Vec<u32>, valor: u32) -> u32 {
     let tamanho: usize = vetor.len();
     for i in 0..tamanho {
