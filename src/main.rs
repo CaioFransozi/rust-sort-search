@@ -1,7 +1,7 @@
 use rand::prelude::*;
 
 fn main() {
-    let mut vetor: Vec<u32> = gerar_vetor(10000000, 100000);
+    let mut vetor: Vec<u32> = gerar_vetor(9, 100);
     radix_sort(&mut vetor);
     // Como o vetor aceita números duplicados, a pesquisa binária retorna sempre a PRIMEIRA
     // correspondência no vetor. Isso não quer dizer que o resultado é, na ordem do vetor, a
@@ -10,10 +10,17 @@ fn main() {
     // poderiamos fazer a pesquisa binária e a partir do valor retornado, procurar tanto nos
     // valores acima quanto nos valores abaixo até encontrar um valor que não fosse o valor
     // desejado e retornar essa distância de valores.
+    for i in &vetor {
+        println!("{i}");
+    }
+    println!();
+    inserir_valor(&mut vetor, 15);
+    for i in &vetor {
+        println!("{i}");
+    }
+    println!();
     let resultado: i32 = pesquisa_binaria(&vetor, 5);
-    let numero_teste: u32 = vetor[resultado as usize];
     println!("{resultado}");
-    println!("{numero_teste}");
 }
 
 // Gera um vetor com valores aleatórios a partir dos argumentos passados à função
@@ -123,21 +130,46 @@ fn radix_sort(mut alvo: &mut Vec<u32>) {
 // na outra atividade de hoje
 fn pesquisa_binaria(vetor: &Vec<u32>, valor_desejado: u32) -> i32 {
     let tamanho: usize = vetor.len();
-    let mut inicio: usize = 0;
-    let mut fim: usize = tamanho - 1;
-    let mut meio: usize;
+    let mut inicio: i32 = 0;
+    let mut fim: i32 = (tamanho - 1) as i32;
+    let mut meio: i32;
     // No algoritmo original também existe um contador de etapas utilizadas para a execução da
     // pesquisa binária. Não vou incluir essa funcionalidade aqui pois acredito que não seja
     // necessário.
     while inicio <= fim {
         meio = (inicio + fim) / 2;
-        if vetor[meio] == valor_desejado {
+        if vetor[meio as usize] == valor_desejado {
             return meio as i32;
-        } else if vetor[meio] < valor_desejado {
+        } else if vetor[meio as usize] < valor_desejado {
             inicio = meio + 1;
         } else {
             fim = meio - 1;
         }
     }
     return -1;
+}
+
+// Por fim, é necessário também desenvolver uma função para inserir um valor novo no vetor de forma
+// ordenada. Para isso utilizarei um algoritmo de pesquisa linear que retorna o indice de um valor
+// igual ao desejado OU o indice anterior ao primeiro valor maior que o desejado OU retorna o
+// tamanho do vetor
+fn pesquisa_linear(vetor: &Vec<u32>, valor: u32) -> u32 {
+    let tamanho: usize = vetor.len();
+    for i in 0..tamanho {
+        if vetor[i] > valor { return (i) as u32 };
+    }
+    return tamanho as u32;
+}
+
+fn inserir_valor(vetor: &mut Vec<u32>, valor: u32) {
+    let tamanho: usize = vetor.len();
+    let indice: u32 = pesquisa_linear(&vetor, valor);
+    // Primeiramente é necessário adicionar mais um valor ao vetor para aumentar o tamanho desse
+    vetor.push(0);
+    // Em seguida deslocamos todos os valores após o indice desejado para 1 indice a mais no vetor
+    for i in (((indice + 1) as usize)..tamanho + 1).rev() {
+        vetor[i] = vetor[i - 1];
+    }
+    // Por fim transformamos o indice descoberto na pesquisa linear no valor desejado
+    vetor[indice as usize] = valor;
 }
