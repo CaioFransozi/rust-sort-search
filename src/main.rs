@@ -1,7 +1,8 @@
 use rand::prelude::*;
+use std::io;
 
 fn main() {
-    let mut vetor: Vec<u32> = gerar_vetor(100000, 10000);
+    let mut vetor: Vec<u32> = gerar_vetor(100, 100);
     radix_sort(&mut vetor);
     // Como o vetor aceita números duplicados, a pesquisa binária retorna sempre a PRIMEIRA
     // correspondência no vetor. Isso não quer dizer que o resultado é, na ordem do vetor, a
@@ -13,14 +14,29 @@ fn main() {
     for i in &vetor {
         println!("{i}");
     }
-    println!();
-    inserir_valor(&mut vetor, 15);
+    println!("Insira um valor para inserir no vetor");
+    let mut inserir_string: String = String::new();
+    io::stdin().read_line(&mut inserir_string).expect("Insira um valor válido");
+    let inserir: u32 = match inserir_string.trim().parse::<u32>() {
+        Ok(n) => n,
+        Err(e) => panic!("Insira um valor válido: {e}")
+    };
+    inserir_valor(&mut vetor, inserir);
     for i in &vetor {
         println!("{i}");
     }
-    println!();
-    let resultado: i32 = pesquisa_binaria(&vetor, 5);
-    println!("{resultado}");
+    println!("Insira um valor para buscar no vetor");
+    let mut buscar_string: String = String::new();
+    io::stdin().read_line(&mut buscar_string).expect("Insira um valor válido");
+    let buscar: u32 = match buscar_string.trim().parse::<u32>() {
+        Ok(n) => n,
+        Err(e) => panic!("Insira um valor válido: {e}")
+    };
+    let resultado: i32 = pesquisa_binaria(&vetor, buscar);
+    match resultado {
+        -1 => println!("Elemento não encontrado no vetor"),
+        n => println!("Elemento encontrado no índice: {n}")
+    }
 }
 
 // Gera um vetor com valores aleatórios a partir dos argumentos passados à função
